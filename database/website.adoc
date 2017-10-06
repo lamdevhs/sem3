@@ -1,0 +1,2 @@
+url = http://138.232.66.66/ra/calc.htm
+id = fd508539832a25188fee
