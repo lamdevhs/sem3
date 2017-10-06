@@ -14,11 +14,21 @@
 
 
 -- -- 2)
-AA = sigma localisation = 'Nice' or capacite < 350 (Avion)
-A = pi avnum, avnom AA
-B = sigma villedep = 'Nice' and villearr = 'Paris' and heuredep > 10 (Vol)
-CC = pi Pilote.plnum ((Pilote) ⨝ Pilote.plnum = Vol.plnum (Vol))
+AA = sigma localisation = 'Nice' (Avion)
+AAA = sigma capacite < 350 (Avion)
+AAAA = (AA) ∩ (AAA)
+A = pi avnum, avnom (AAAA)
+B1 = sigma villedep = 'Nice' (Vol)
+B2 = sigma villearr = 'Paris' (Vol)
+B3 = sigma heuredep > 10 (Vol)
+B = B1 ∩ B2 ∩ B3
+CC = pi plnum (Pilote)
 C = (CC) - (pi plnum (Pilote))
+D1 = sigma plnum = 8 (Vol)
+D2 = sigma plnum = 9 (Vol)
+D3 = (pi volnum, villedep (D1)) ∩ (pi volnum, villedep (D2)) 
+
+
 DD = sigma plnum = 8 or plnum = 9 (Pilote)
 DDD = (DD) ⨝ Pilote.plnum = Vol.plnum (Vol)
 D = pi volnum, villedep DDD
@@ -52,5 +62,15 @@ DupontCity = rho dupontVille <- ville (pi ville (Dupont))
 FF = (DupontCity) ⨝ ville = dupontVille (Pilote)
 F = pi plnum, plnom FF
 
-PiloteEnService = 
+-- pas non plus de pilotes Durand :P
+NumPilotesEnService = pi plnum (Vol)
+NumPiloteDurand = pi plnum (sigma plnom = 'Durand' (Pilote))
+G = NumPilotesEnService - NumPiloteDurand
+
+
+HHH = sigma villedep = 'Paris' (Vol)
+HH = rho vvv <- villearr (HHH)
+H4 = (pi villearr (Vol)) ⨝ vvv = villearr (pi vvv (HH))
+H = pi villearr (H4)
+
 
