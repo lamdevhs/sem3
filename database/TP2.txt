@@ -1,0 +1,56 @@
+-- TP2
+
+-- -- 1))
+-- Avion
+-- sigma capacite < 350 (Avion)
+-- pi avnum, avnom (sigma localisation = 'Nice' (Avion))
+-- Pilote
+-- sigma ville = 'Paris' and salaire > 3000 (Pilote)
+-- pi volnum, heuredep (sigma villedep = 'Paris' and villearr = 'Toulouse' (Vol))
+
+-- X = (Pilote) ⨝ Pilote.plnum = Vol.plnum (Vol)
+-- pi Pilote.plnum, villedep (X)
+
+
+
+-- -- 2)
+AA = sigma localisation = 'Nice' or capacite < 350 (Avion)
+A = pi avnum, avnom AA
+B = sigma villedep = 'Nice' and villearr = 'Paris' and heuredep > 10 (Vol)
+CC = pi Pilote.plnum ((Pilote) ⨝ Pilote.plnum = Vol.plnum (Vol))
+C = (CC) - (pi plnum (Pilote))
+DD = sigma plnum = 8 or plnum = 9 (Pilote)
+DDD = (DD) ⨝ Pilote.plnum = Vol.plnum (Vol)
+D = pi volnum, villedep DDD
+D
+
+
+-- 3)
+PV = (Pilote) ⨝ Pilote.plnum = Vol.plnum (Vol)
+AV = (Vol) ⨝ Vol.avnum = Avion.avnum (Avion)
+AVP = (Pilote) ⨝ Vol.plnum = Pilote.plnum (AV)
+
+AA = sigma villedep = 'Toulouse' and Pilote.ville = 'Toulouse' (PV)
+A = pi volnum AA
+
+BB = sigma localisation ≠ 'Nice' (AV)
+B = pi Avion.avnum (BB)
+
+CC = sigma villedep = 'Nice' or capacite > 250 (AVP)
+C = pi Pilote.plnum, Pilote.plnom (CC)
+
+
+DD = sigma Pilote.ville = 'Paris' and villedep = 'Nice' and Avion.avnom like 'A%' (AVP)
+D = pi Pilote.plnom (DD)
+
+EE = sigma Pilote.ville = 'Nice' and Avion.localisation = 'Paris' and (villedep = 'Nice' or villearr = 'Nice') (AVP)
+E = pi Vol.volnum (EE)
+
+-- il n'y a aucun pilote du nom de Dupont dans Pilote... mais s'il existait voici ce que je ferais:
+Dupont = sigma plnom = 'Dupont' (Pilote)
+DupontCity = rho dupontVille <- ville (pi ville (Dupont))
+FF = (DupontCity) ⨝ ville = dupontVille (Pilote)
+F = pi plnum, plnom FF
+
+PiloteEnService = 
+
