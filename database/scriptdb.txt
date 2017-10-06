@@ -1,0 +1,50 @@
+group: Gestion Vol
+
+Pilote = {
+	plnum:number, plnom:string, plprenom:string, ville:string, salaire:number
+	1           , 'Zighed'    , 'Djamel'       , 'Paris'     , 21000         
+	2           , 'Boussaid'  , 'Omar'         , 'Toulouse'  , 21000
+	3,'Viallaneix','Jacques','Nice',18000
+4,'Nicoloyannis','Nicolas','Paris',17000
+5,'Darmont','Jerome','Toulouse',19000
+6,'Lallich','Stephane','Paris',18000
+7,'Rakotomalala','Ricco','Nice',17000
+8,'Chauchat','Jean-Hughes','Lyon',15000
+9,'Mahboubi','Hadj','Nice',18000
+10,'B ntayeb','Fadila','Paris',20000
+}
+Avion = {
+	avnum:number, avnom:string, capacite:number, localisation:string
+	1,'A300',300,'Nice'
+2,'A310',300,'Nice'
+3,'B707',250,'Paris'
+4,'A300',280,'Lyon'
+5,'Concorde',160,'Nice'
+6,'B747',460,'Paris'
+7,'B707',250,'Paris'
+8,'A310',300,'Toulouse'
+9,'Mercure',180,'Lyon'
+10,'Concorde',160,'Paris'
+}
+
+
+Vol = {
+	volnum:number, plnum:number, avnum:number, villedep:string, villearr:string, heuredep:number, heurearr:number
+1,1,1,'Nice','Toulouse',11,12
+2,1,8,'Paris','Toulouse',17,18
+3,2,1,'Toulouse','Lyon',14,16
+4,5,3,'Toulouse','Lyon',18,20
+5,9,1,'Paris','Nice',6,8
+6,10,2,'Lyon','Nice',11,12
+7,1,4,'Pa Is','Lyon',8,9
+8,8,4,'Nice','Paris',7,8
+9,1,8,'Nantes','Lyon',9,15
+10,8,2,'Nice','Paris',12,13
+11,9,2,'Paris','Lyon',15,16
+12,1,2,'Lyon','Nantes',16,20
+13,4,5,'Nice','Lens',11,14
+14,3,5,'Lens','Paris',15,16
+15,8,9,'Paris','Toulouse',17,18
+16,7,5,'Paris','Toulouse',18,19
+}
+
