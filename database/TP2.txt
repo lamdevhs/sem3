@@ -14,16 +14,19 @@
 
 
 -- -- 2)
-AA = sigma localisation = 'Nice' (Avion)
-AAA = sigma capacite < 350 (Avion)
-AAAA = (AA) ∩ (AAA)
-A = pi avnum, avnom (AAAA)
+A1 = sigma localisation = 'Nice' (Avion)
+A2 = sigma capacite < 350 (Avion)
+A3 = (A1) ∩ (A2)
+A = pi avnum, avnom (A3)
+
 B1 = sigma villedep = 'Nice' (Vol)
 B2 = sigma villearr = 'Paris' (Vol)
 B3 = sigma heuredep > 10 (Vol)
 B = B1 ∩ B2 ∩ B3
-CC = pi plnum (Pilote)
-C = (CC) - (pi plnum (Pilote))
+
+C1 = pi plnum (Pilote)
+C = (C1) - (pi plnum (Pilote))
+
 D1 = sigma plnum = 8 (Vol)
 D2 = sigma plnum = 9 (Vol)
 D3 = (pi volnum, villedep (D1)) ∩ (pi volnum, villedep (D2)) 
