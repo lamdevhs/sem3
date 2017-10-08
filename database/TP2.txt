@@ -22,44 +22,51 @@ A = pi avnum, avnom (A3)
 B1 = sigma villedep = 'Nice' (Vol)
 B2 = sigma villearr = 'Paris' (Vol)
 B3 = sigma heuredep > 10 (Vol)
-B = B1 ∩ B2 ∩ B3
+B = B1 ∩ B2 ∩ B3 
 
 C1 = pi plnum (Pilote)
 C = (C1) - (pi plnum (Pilote))
 
 D1 = sigma plnum = 8 (Vol)
 D2 = sigma plnum = 9 (Vol)
-D3 = (pi volnum, villedep (D1)) ∩ (pi volnum, villedep (D2)) 
-
-
-DD = sigma plnum = 8 or plnum = 9 (Pilote)
-DDD = (DD) ⨝ Pilote.plnum = Vol.plnum (Vol)
-D = pi volnum, villedep DDD
-D
-
+D = (pi volnum, villedep (D1)) ∩ (pi volnum, villedep (D2)) 
 
 -- 3)
-PV = (Pilote) ⨝ Pilote.plnum = Vol.plnum (Vol)
-AV = (Vol) ⨝ Vol.avnum = Avion.avnum (Avion)
-AVP = (Pilote) ⨝ Vol.plnum = Pilote.plnum (AV)
+A l'origine j'ai commencé par utiliser ces trois tables de jointure:
+    PV = (Pilote) ⨝ Pilote.plnum = Vol.plnum (Vol)
+    AV = (Vol) ⨝ Vol.avnum = Avion.avnum (Avion)
+    AVP = (Pilote) ⨝ Vol.plnum = Pilote.plnum (AV)
+Mais j'ai réécrit les formules ci-dessous en tentant de tenir compte de l'efficacité
+de l'ordre des opérateurs, notamment en essayant de joindre des petites tables.
 
-AA = sigma villedep = 'Toulouse' and Pilote.ville = 'Toulouse' (PV)
-A = pi volnum AA
-
-BB = sigma localisation ≠ 'Nice' (AV)
-B = pi Avion.avnum (BB)
-
-CC = sigma villedep = 'Nice' or capacite > 250 (AVP)
-C = pi Pilote.plnum, Pilote.plnom (CC)
+Avol = sigma villedep = 'Toulouse' (Vol)
+Apilote =sigma Pilote.ville = 'Toulouse' (Pilote)
+Avp = (Avol) ⨝ Pilote.plnum = Vol.plnum (Apilote)
+A = pi volnum Avp
 
 
-DD = sigma Pilote.ville = 'Paris' and villedep = 'Nice' and Avion.avnom like 'A%' (AVP)
-D = pi Pilote.plnom (DD)
+Bavion = sigma localisation ≠ 'Nice' (Avion)
+B = (pi Avion.avnum Bavion) ⨝ Avion.avnum = Vol.avnum (pi Vol.avnum Vol)
 
-EE = sigma Pilote.ville = 'Nice' and Avion.localisation = 'Paris' and (villedep = 'Nice' or villearr = 'Nice') (AVP)
+Cvol = sigma villedep = 'Nice' Vol
+Cavion = sigma capacite > 250 Avion
+Cpilote = pi plnum, plnom Pilote
+Cavp = Cpilote ⨝ Vol.plnum = Pilote.plnum (Cvol ⨝ Avion.avnum = Vol.avnum Cavion)
+C = pi Pilote.plnum, Pilote.plnom Cavp
+
+Dvol = sigma villedep = 'Nice' Vol
+Davion = sigma Avion.avnom like 'A%' Avion
+Dpilote = sigma Pilote.ville = 'Paris' Pilote
+Davp = Dpilote ⨝ Vol.plnum = Pilote.plnum (Dvol ⨝ Avion.avnum = Vol.avnum Davion)
+D = pi Pilote.plnom (Davp)
+
+Evol = sigma villedep = 'Nice' or villearr = 'Nice' Vol
+Eavion = sigma Avion.localisation = 'Paris' Avion
+Epilote = sigma Pilote.ville = 'Nice' Pilote
+E4 = Epilote ⨝ Vol.plnum = Pilote.plnum (Evol ⨝ Avion.avnum = Vol.avnum Eavion)
 E = pi Vol.volnum (EE)
 
--- il n'y a aucun pilote du nom de Dupont dans Pilote... mais s'il existait voici ce que je ferais:
+-- (il n'y a aucun pilote du nom de Dupont dans Pilote...)
 Dupont = sigma plnom = 'Dupont' (Pilote)
 DupontCity = rho dupontVille <- ville (pi ville (Dupont))
 FF = (DupontCity) ⨝ ville = dupontVille (Pilote)
@@ -69,7 +76,6 @@ F = pi plnum, plnom FF
 NumPilotesEnService = pi plnum (Vol)
 NumPiloteDurand = pi plnum (sigma plnom = 'Durand' (Pilote))
 G = NumPilotesEnService - NumPiloteDurand
-
 
 HHH = sigma villedep = 'Paris' (Vol)
 HH = rho vvv <- villearr (HHH)
