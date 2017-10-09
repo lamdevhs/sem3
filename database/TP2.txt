@@ -1,85 +1,151 @@
--- TP2
+-- TP2 Databases, Nathanael Bayard
 
--- -- 1))
--- Avion
--- sigma capacite < 350 (Avion)
--- pi avnum, avnom (sigma localisation = 'Nice' (Avion))
--- Pilote
--- sigma ville = 'Paris' and salaire > 3000 (Pilote)
--- pi volnum, heuredep (sigma villedep = 'Paris' and villearr = 'Toulouse' (Vol))
+-- -- 1)
+-- a. Affichez le contenu de la relation avion
+A = Avion
 
--- X = (Pilote) ⨝ Pilote.plnum = Vol.plnum (Vol)
--- pi Pilote.plnum, villedep (X)
+-- b. Donnez la liste des avions dont la capacité est supérieure à 350 passagers.
+B = sigma capacite < 350 (Avion)
+
+-- c. Quels sont les numéros et noms des avions localisés à Nice ?
+C = pi avnum, avnom (sigma localisation = 'Nice' Avion)
+
+-- d. Donnez toutes les informations sur les pilotes de la compagnie.
+D = Pilote
+
+-- e. Quel est le nom des pilotes domiciliés à Paris dont le salaire est supérieur à 3000€
+E = pi plnom (sigma ville = 'Paris' and salaire > 3000 Pilote)
+
+-- f. Affichez la liste des vols ( Num Vol, Heure de départ) de départ de Paris et avec
+une arrivée à Toulouse
+F = pi volnum, heuredep  sigma villedep = 'Paris' and villearr = 'Toulouse' Vol
+    -- ou bien:
+F2 = pi volnum, heuredep  sigma villedep = 'Paris'  sigma villearr = 'Toulouse' Vol
+
+-- g. Quels sont les numéros des pilotes en service et les villes de départ de leurs vols ?
+G = pi plnum, villedep Vol
 
 
+-- 2) Utilisation des opérateurs ensemblistes
+-- a. Quels sont les avions (numéro et nom) localisés à Nice ou dont la capacité est
+inférieure à 350 passagers ?
+A1 = pi avnum, avnom  sigma localisation = 'Nice' Avion
+A2 = pi avnum, avnom  sigma capacite < 350 Avion
+A = A1 ∪ A2
 
--- -- 2)
-A1 = sigma localisation = 'Nice' (Avion)
-A2 = sigma capacite < 350 (Avion)
-A3 = (A1) ∩ (A2)
-A = pi avnum, avnom (A3)
-
-B1 = sigma villedep = 'Nice' (Vol)
-B2 = sigma villearr = 'Paris' (Vol)
-B3 = sigma heuredep > 10 (Vol)
+-- b. Liste des vols au départ de Nice allant à Paris après 10 heures ?
+B1 = sigma villedep = 'Nice' Vol
+B2 = sigma villearr = 'Paris' Vol
+B3 = sigma heuredep > 10 Vol
 B = B1 ∩ B2 ∩ B3 
 
-C1 = pi plnum (Pilote)
-C = (C1) - (pi plnum (Pilote))
+-- c. Quels sont les numéros des pilotes qui ne sont pas en service ?
+NumPilotesEnService = pi plnum Vol
+C = (pi plnum Pilote) - NumPilotesEnService
 
-D1 = sigma plnum = 8 (Vol)
-D2 = sigma plnum = 9 (Vol)
-D = (pi volnum, villedep (D1)) ∩ (pi volnum, villedep (D2)) 
+-- d. Quels sont les vols (numéro, ville de départ) effectués par les pilotes de numéro 8
+et 9 ?
+D1 = pi volnum, villedep sigma plnum = 8 (Vol)
+D2 = pi volnum, villedep sigma plnum = 9 (Vol)
+D = D1 ∩ D2
 
--- 3)
+-- 3) Expression des jointures
 A l'origine j'ai commencé par utiliser ces trois tables de jointure:
     PV = (Pilote) ⨝ Pilote.plnum = Vol.plnum (Vol)
     AV = (Vol) ⨝ Vol.avnum = Avion.avnum (Avion)
     AVP = (Pilote) ⨝ Vol.plnum = Pilote.plnum (AV)
 Mais j'ai réécrit les formules ci-dessous en tentant de tenir compte de l'efficacité
-de l'ordre des opérateurs, notamment en essayant de joindre des petites tables.
+de l'ordre des opérateurs, notamment en essayant de joindre de petites tables.
 
+-- a. Donnez le numéro des vols effectués au départ de Toulouse par des pilotes
+Toulousains?
 Avol = sigma villedep = 'Toulouse' (Vol)
 Apilote =sigma Pilote.ville = 'Toulouse' (Pilote)
 Avp = (Avol) ⨝ Pilote.plnum = Vol.plnum (Apilote)
 A = pi volnum Avp
 
-
+-- b. Quels sont les vols effectués par un avion qui n’est pas localisé à Nice ?
 Bavion = sigma localisation ≠ 'Nice' (Avion)
-B = (pi Avion.avnum Bavion) ⨝ Avion.avnum = Vol.avnum (pi Vol.avnum Vol)
+B1 = (pi Avion.avnum Bavion) ⨝ Avion.avnum = Vol.avnum (pi Vol.avnum Vol)
+B = (pi Vol.avnum Vol) - (pi Vol.avnum B1)
 
+-- c. Quels sont les pilotes (numéro et nom) assurant au moins un vol au départ de
+Nice avec un avion de capacité supérieure à 250 places ?
 Cvol = sigma villedep = 'Nice' Vol
 Cavion = sigma capacite > 250 Avion
 Cpilote = pi plnum, plnom Pilote
 Cavp = Cpilote ⨝ Vol.plnum = Pilote.plnum (Cvol ⨝ Avion.avnum = Vol.avnum Cavion)
 C = pi Pilote.plnum, Pilote.plnom Cavp
 
-Dvol = sigma villedep = 'Nice' Vol
-Davion = sigma Avion.avnom like 'A%' Avion
-Dpilote = sigma Pilote.ville = 'Paris' Pilote
+-- d. Quels sont les noms des pilotes domiciliés à Paris assurant un vol au départ de
+Nice avec un Airbus ?
+Dvol = pi avnum, plnum (sigma villedep = 'Nice' Vol)
+Davion = pi avnum (sigma avnom like 'A%' Avion)
+Dpilote = pi plnum, plnom (sigma Pilote.ville = 'Paris' Pilote)
 Davp = Dpilote ⨝ Vol.plnum = Pilote.plnum (Dvol ⨝ Avion.avnum = Vol.avnum Davion)
 D = pi Pilote.plnom (Davp)
 
-Evol = sigma villedep = 'Nice' or villearr = 'Nice' Vol
-Eavion = sigma Avion.localisation = 'Paris' Avion
-Epilote = sigma Pilote.ville = 'Nice' Pilote
-E4 = Epilote ⨝ Vol.plnum = Pilote.plnum (Evol ⨝ Avion.avnum = Vol.avnum Eavion)
-E = pi Vol.volnum (EE)
+-- e. Quels sont les numéros des vols effectués par un pilote Niçois au départ ou à
+l’arrivée de Nice avec un avion localisé à Paris ?
+Evol = pi volnum, plnum, avnum (sigma villedep = 'Nice' or villearr = 'Nice' Vol)
+Eavion = pi avnum (sigma Avion.localisation = 'Paris' Avion)
+Epilote = pi plnum (sigma Pilote.ville = 'Nice' Pilote)
+Eavp = Epilote ⨝ Vol.plnum = Pilote.plnum (Evol ⨝ Avion.avnum = Vol.avnum Eavion)
+E = pi Vol.volnum Eavp
 
+-- f. Quels sont les pilotes (numéro et nom) habitant dans la même ville que le pilote
+Dupont ?
 -- (il n'y a aucun pilote du nom de Dupont dans Pilote...)
 Dupont = sigma plnom = 'Dupont' (Pilote)
 DupontCity = rho dupontVille <- ville (pi ville (Dupont))
 FF = (DupontCity) ⨝ ville = dupontVille (Pilote)
 F = pi plnum, plnom FF
+-- éventuellement on pourrait soustraire (pi plnum, plnom Dupont) au résultat
+-- pour n'obtenir que les *autres* pilotes habitant dans
+-- la même ville.
 
--- pas non plus de pilotes Durand :P
+-- g. Quels sont les numéros des pilotes en service différents de celui de Durand ?
+-- (pas non plus de pilotes Durand)
 NumPilotesEnService = pi plnum (Vol)
 NumPiloteDurand = pi plnum (sigma plnom = 'Durand' (Pilote))
 G = NumPilotesEnService - NumPiloteDurand
 
-HHH = sigma villedep = 'Paris' (Vol)
-HH = rho vvv <- villearr (HHH)
-H4 = (pi villearr (Vol)) ⨝ vvv = villearr (pi vvv (HH))
-H = pi villearr (H4)
+-- h. Quelles sont les villes desservies à partir de la ville d’arrivée d’un vol au départ
+de Paris ?
+-- pas sur d'avoir bien compris la question, je l'ai interprétée
+-- comme voulant dire les villes d'arrivée pour lesquelles
+-- la ville de départ du vol correspondant
+-- serait elle-même la ville d'arrivée d'au
+-- moins un (autre) vol avec départ de paris.
+HdepParis = sigma villedep = 'Paris' Vol
+HdepParis2 = rho villearrPourDepParis <- villearr (pi villearr HdepParis)
+HH = (pi villedep, villearr (Vol)) ⨝ villearrPourDepParis = Vol.villedep HdepParis2
+H = pi villearr (HH)
 
+-- i. Quels sont les appareils (leur numéro) localisés dans la même ville que l’avion
+numéro 100 ?
+-- (pas d'avion 100 existant non plus)
+Avion100 = sigma avnum = 100 Avion
+LocAvion100 = rho locAvion100 <- localisation (pi localisation Avion100)
+II = (pi localisation, avnum Avion) ⨝ Avion.localisation = locAvion100 (LocAvion100)
+I = pi avnum II
+
+-- 4) divers
+
+-- j. Quels sont les numéros et noms des pilotes domiciliés dans la même ville que le
+pilote Dupont et dont le salaire est supérieur à celui de Dupont ?
+
+Dupont = sigma plnom = 'Dupont' Pilote
+Dupont2 = rho dupontSalaire <- salaire, dupontVille <- ville (pi salaire, ville Dupont)
+P = pi plnum, plnom, salaire, ville Pilote
+JJ = (P) ⨝ salaire > dupontSalaire and dupontVille = ville (Dupont2)
+J = pi plnum, plnom JJ
+
+-- k. Quels sont les numéros et noms des pilotes qui effectuent un vol au départ de leur
+ville de résidence ?
+
+Kpilote = pi plnum, plnom, ville Pilote
+Kvol = pi villedep, plnum Vol
+KK = Kvol ⨝ villedep = ville and Vol.plnum = Pilote.plnum Kpilote
+K = pi Pilote.plnum, plnom KK
 
