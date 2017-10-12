@@ -88,7 +88,7 @@ pi ENOM ((pi ENOM, ENO EMP) join EMP.ENO = DEPT.DIR (CommercialDeptDir)
 -- DptProd = pi DNO sigma DNOM = 'Production' DEPT
 -- DateEmb = pi DATEEMB, DNO EMP
 -- DateEmbProd = rho DATEEMBProd <- DATEEMB pi DATEEMB (DateEmb ⨝ EMP.DNO = DEPT.DNO DptProd)
--- DptCom = pi DNO sigma DNOM = 'Commercial' DEPT
+-- DptCom = pi DNO ))sigma DNOM = 'Commercial' DEPT
 -- EmpCom = pi DATEEMB, ENOM (DptCom ⨝ DEPT.DNO = EMP.DNO (pi DATEEMB, ENOM, DNO EMP))
 -- pi ENOM (DateEmbProd ⨝ DATEEMBProd = DATEEMB (EmpCom))
 
@@ -111,5 +111,20 @@ d) On peut avoir plusieurs n-uplets dans JOUE avec le même IDACTEUR, un IDFILM 
 le salaire d'un acteur peut varier selon les films dans lesquels il joue, donc non.
 
 2)
-pi titre, annee FILM
+-- a)
+-- pi titre, annee FILM
 
+-- b)
+-- ThrillerOrAdventure = sigma type = 'thriller' or type = 'aventure' GENRE
+-- pi annee, titre, type (FILM ⨝ FILM.idGenre = GENRE.id (ThrillerOrAdventure))
+
+-- c)
+-- Dujardin = pi nom, prenom, id sigma nom = 'Dujardin' PERSONNE
+-- JoueDujardin = pi idFilm, nom, prenom (JOUE ⨝ id = idActeur Dujardin)
+-- FilmsJoueDujardin = JoueDujardin ⨝ idFilm = id FILM
+-- pi nom, prenom, titre, annee  FilmsJoueDujardin
+
+3)
+-- a)
+pi titre, annee sigma nbSpectateurs > 5000000 FILM
+b)
