@@ -1,0 +1,82 @@
+Intro Bases de données - TP3 - Nathanael Bayard
+
+1) sigma sal < 5000 (EMP) =
++-----+------+------------+---------+------+------+-----+
+| ENO | ENOM | PROF       | DATEEMB | SAL  | COMM | DNO |
++-----+------+------------+---------+------+------+-----+
+| 10  | Joe  | Ingénieur  | 1.10.93 | 4000 | 3000 | 3   |
++-----+------+------------+---------+------+------+-----+
+| 20  | Jack | Technicien | 1.5.88  | 3000 | 2000 | 2   |
++-----+------+------------+---------+------+------+-----+
+
+2) EMPbis = rho ENO/ENO' pi ENO, COMM (EMP) =
++------+------+
+| ENO' | COMM |
++------+------+
+| 10   | 3000 |
++------+------+
+| 20   | 2000 |
++------+------+
+| 30   | 5000 |
++------+------+
+| 40   | 5000 |
++------+------+
+
+3) pi ENO,SAL (EMP) join SAL = COMM (EMPbis) =
++-----+------+
+| ENO | SAL  |
++-----+------+
+| 20  | 3000 |
++-----+------+
+| 30  | 5000 |
++-----+------+
+| 40  | 5000 |
++-----+------+
+
+4)
+Requête 1: toutes les infos des empolyés dont le salaire est inférieur strictement à 5000.
+Requête 2: le numéro d'employé (renommé ENO') et la commission de tous les employés
+Requête 3: le numéro d'employé et le salaire de tous les employés dont le salaire est égal à la commission d'au moins un
+(possiblement autre) employé.
+
+5) pi ENOM, PROF sigma ENO = 10 (EMP)
+
+6) DeptNewYork = pi DNO (sigma VILLE = 'New York' DEPT)
+pi ENOM sigma ((DeptNewYork) join DEPT.DNO = EMP.DNO (pi ENOM, DNO EMP)) 
+
+7) CommercialDeptDir = pi DIR (sigma DNOM = 'Commercial' DEPT)
+pi ENOM ((pi ENOM, ENO EMP) join EMP.ENO = DEPT.DIR (CommercialDeptDir)
+
+8) 
+-- a)
+-- DEPT
+
+-- b)
+-- EMP
+
+-- c)
+-- pi ENOM, SAL EMP
+
+-- d)
+-- pi PROF EMP
+
+-- e)
+-- pi DATEEMB sigma PROF = 'Technicien' EMP
+
+-- f)
+-- DptNoms = pi DNOM, DNO DEPT
+-- pi ENOM, DNOM (DptNoms ⨝ DEPT.DNO = EMP.DNO (pi ENOM, DNO EMP))
+
+-- g)
+-- DptBoston = pi DNO sigma Ville = 'Boston' DEPT
+-- pi ENOM (DptBoston ⨝ DEPT.DNO = EMP.DNO (pi ENOM, DNO EMP))
+
+-- h)
+-- DeptDir = pi DIR (sigma DNO = 1 or DNO = 3 DEPT)
+-- pi ENOM ((pi ENOM, ENO EMP) join EMP.ENO = DEPT.DIR (DeptDir))
+
+-- i)
+-- IngDept = rho DNO2 <- DNO pi DNO sigma PROF = 'Ingénieur' EMP
+pi ENOM ((pi ENOM, DNO EMP) ⨝ DNO = DNO2 IngDept)
+
+
