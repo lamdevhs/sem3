@@ -91,3 +91,25 @@ pi ENOM ((pi ENOM, ENO EMP) join EMP.ENO = DEPT.DIR (CommercialDeptDir)
 -- DptCom = pi DNO sigma DNOM = 'Commercial' DEPT
 -- EmpCom = pi DATEEMB, ENOM (DptCom ⨝ DEPT.DNO = EMP.DNO (pi DATEEMB, ENOM, DNO EMP))
 -- pi ENOM (DateEmbProd ⨝ DATEEMBProd = DATEEMB (EmpCom))
+
+
+Partie 2 :
+==========
+
+1)
+a) Oui, une personne peut réaliser plusieurs films. Par exemple l'ID d'un n-uplet x quelconque dans PERSONNE peut
+se retrouver dans le champ IDREALISATEUR de plus d'un n-uplet de la table FILM, correspondant chacun à un film différent.
+
+b) Pour tout n-uplet de FILM, chacun représentant un film unique, il n'y a qu'un IDGENRE, correspondant à un n-uplet
+de la table GENRE, correspondant à un genre unique, donc non.
+
+c) Oui: l'ID d'un n-uplet de PERSONNE peut se retrouver dans le champ IDACTEUR de plus d'un n-uplet de JOUE,
+car la clé privé de JOUE dépend de IDACTEUR mais aussi de IDFILM. I peut donc y avoir plusieurs n-uplets dans JOUE
+avec le même IDACTEUR, correspondant à une seule personne, mais plusieurs films.
+
+d) On peut avoir plusieurs n-uplets dans JOUE avec le même IDACTEUR, un IDFILM différent, et un SALAIRE différent, d'où
+le salaire d'un acteur peut varier selon les films dans lesquels il joue, donc non.
+
+2)
+pi titre, annee FILM
+
