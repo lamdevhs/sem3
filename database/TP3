@@ -77,6 +77,17 @@ pi ENOM ((pi ENOM, ENO EMP) join EMP.ENO = DEPT.DIR (CommercialDeptDir)
 
 -- i)
 -- IngDept = rho DNO2 <- DNO pi DNO sigma PROF = 'Ingénieur' EMP
-pi ENOM ((pi ENOM, DNO EMP) ⨝ DNO = DNO2 IngDept)
+-- pi ENOM ((pi ENOM, DNO EMP) ⨝ DNO = DNO2 IngDept)
 
+-- j)
+-- DirDpt = pi DNO, DIR DEPT
+-- DirNum_DptNom = rho DIRNOM <- ENOM pi ENOM, DNO (DirDpt ⨝ -- DEPT.DIR = EMP.ENO (pi ENO, ENOM EMP))
+-- pi ENOM, DIRNOM (DirNum_DptNom ⨝ EMP.DNO = DEPT.DNO (pi ENOM, DNO EMP))
 
+-- k)
+-- DptProd = pi DNO sigma DNOM = 'Production' DEPT
+-- DateEmb = pi DATEEMB, DNO EMP
+-- DateEmbProd = rho DATEEMBProd <- DATEEMB pi DATEEMB (DateEmb ⨝ EMP.DNO = DEPT.DNO DptProd)
+-- DptCom = pi DNO sigma DNOM = 'Commercial' DEPT
+-- EmpCom = pi DATEEMB, ENOM (DptCom ⨝ DEPT.DNO = EMP.DNO (pi DATEEMB, ENOM, DNO EMP))
+-- pi ENOM (DateEmbProd ⨝ DATEEMBProd = DATEEMB (EmpCom))
