@@ -1,0 +1,69 @@
+Intro Bases de données - TP3 - Nathanael Bayard
+
+Partie 2 :
+==========
+
+1)
+a) Oui, une personne peut réaliser plusieurs films. Par exemple l'ID d'un n-uplet x quelconque dans PERSONNE peut
+se retrouver dans le champ IDREALISATEUR de plus d'un n-uplet de la table FILM, correspondant chacun à un film différent.
+
+b) Pour tout n-uplet de FILM, chacun représentant un film unique, il n'y a qu'un IDGENRE, correspondant à un n-uplet
+de la table GENRE, correspondant à un genre unique, donc non.
+
+c) Oui: l'ID d'un n-uplet de PERSONNE peut se retrouver dans le champ IDACTEUR de plus d'un n-uplet de JOUE,
+car la clé privé de JOUE dépend de IDACTEUR mais aussi de IDFILM. I peut donc y avoir plusieurs n-uplets dans JOUE
+avec le même IDACTEUR, correspondant à une seule personne, mais plusieurs films.
+
+d) On peut avoir plusieurs n-uplets dans JOUE avec le même IDACTEUR, un IDFILM différent, et un SALAIRE différent, d'où
+le salaire d'un acteur peut varier selon les films dans lesquels il joue, donc non.
+
+2)
+-- a)
+-- pi titre, annee FILM
+
+-- b)
+-- ThrillerOrAdventure = sigma type = 'thriller' or type = 'aventure' GENRE
+-- pi annee, titre, type (FILM ⨝ FILM.idGenre = GENRE.id (ThrillerOrAdventure))
+
+-- c)
+-- Dujardin = pi nom, prenom, id sigma nom = 'Dujardin' PERSONNE
+-- JoueDujardin = pi idFilm, nom, prenom (JOUE ⨝ id = idActeur Dujardin)
+-- FilmsJoueDujardin = JoueDujardin ⨝ idFilm = id FILM
+-- pi nom, prenom, titre, annee  FilmsJoueDujardin
+
+3)
+-- a)
+pi titre, annee sigma nbSpectateurs > 5000000 FILM
+
+-- a1) il y a deux questions numérotées 'a'
+IdR = pi idRealisateur FILM
+P = pi nom, prenom, id PERSONNE
+pi nom, prenom (IdR ⨝ PERSONNE.id = FILM.idRealisateur P)
+
+-- b)
+IdEastwood = pi id sigma nom = 'Eastwood' PERSONNE
+F = pi idRealisateur, titre FILM
+pi titre (F ⨝ id = idRealisateur IdEastwood)
+
+-- c)
+IdD = pi id sigma nom = 'Dujardin' PERSONNE
+IdC = pi id sigma nom = 'Cotillard' PERSONNE
+Djoue = pi idFilm (IdD ⨝ idActeur = id JOUE)
+Cjoue = pi idFilm (IdC ⨝ idActeur = id JOUE)
+CDjouent = Djoue ⨝ Cjoue
+F = pi id, titre FILM
+pi titre (F ⨝ id = idFilm CDjouent)
+
+-- d)
+IdRea = pi idRealisateur FILM
+P = pi id, nom, prenom PERSONNE
+PRea = pi id, nom, prenom (P ⨝ id = idRealisateur IdRea)
+P - PRea
+
+-- e)
+Sup900k = pi idActeur, idFilm sigma salaire > 900000 JOUE
+F = pi id, titre FILM
+P = pi id, nom, prenom, naissance PERSONNE
+X = pi nom, prenom, naissance, idFilm (Sup900k ⨝ idActeur = id P)
+pi nom, prenom, naissance, titre (X ⨝ idFilm = id F)
+
