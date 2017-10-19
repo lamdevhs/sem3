@@ -1,4 +1,4 @@
-v est une valuation telle que v(A)=0 et v[(A \leftrightarrow B)]=1
+v est une valuation telle que v(A)=0 et v[(A <-> B)]=1
 
 Que vaut v(B) ?
 
