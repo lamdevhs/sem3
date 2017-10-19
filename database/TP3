@@ -129,4 +129,36 @@ le salaire d'un acteur peut varier selon les films dans lesquels il joue, donc n
 3)
 -- a)
 pi titre, annee sigma nbSpectateurs > 5000000 FILM
-b)
+
+-- a1) il y a deux questions numérotées 'a'
+IdR = pi idRealisateur FILM
+P = pi nom, prenom, id PERSONNE
+pi nom, prenom (IdR ⨝ PERSONNE.id = FILM.idRealisateur P)
+
+-- b)
+IdEastwood = pi id sigma nom = 'Eastwood' PERSONNE
+F = pi idRealisateur, titre FILM
+pi titre (F ⨝ id = idRealisateur IdEastwood)
+
+-- c)
+IdD = pi id sigma nom = 'Dujardin' PERSONNE
+IdC = pi id sigma nom = 'Cotillard' PERSONNE
+Djoue = pi idFilm (IdD ⨝ idActeur = id JOUE)
+Cjoue = pi idFilm (IdC ⨝ idActeur = id JOUE)
+CDjouent = Djoue ⨝ Cjoue
+F = pi id, titre FILM
+pi titre (F ⨝ id = idFilm CDjouent)
+
+-- d)
+IdRea = pi idRealisateur FILM
+P = pi id, nom, prenom PERSONNE
+PRea = pi id, nom, prenom (P ⨝ id = idRealisateur IdRea)
+P - PRea
+
+-- e)
+Sup900k = pi idActeur, idFilm sigma salaire > 900000 JOUE
+F = pi id, titre FILM
+P = pi id, nom, prenom, naissance PERSONNE
+X = pi nom, prenom, naissance, idFilm (Sup900k ⨝ idActeur = id P)
+pi nom, prenom, naissance, titre (X ⨝ idFilm = id F)
+
