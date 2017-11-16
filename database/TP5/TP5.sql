@@ -21,7 +21,7 @@ SELECT DISTINCT pays
 FROM sportif;
 \echo Ils sont tous français.
 
-\echo d. Intitulé des sports dont l'intitulé comporte la chaîne "te"
+\echo d. Intitulé des sports dont l intitulé comporte la chaîne "te"
 SELECT intitule
 FROM sport
 WHERE intitule LIKE '%te%';
@@ -51,7 +51,7 @@ SELECT nom, prenom, date_naiss
 FROM sportif
 WHERE '15-09-2000' - date_naiss < 30;
 
-\echo j. Corriger l'intitulé de la discipline "-100 kg" en "- 100 kg"
+\echo j. Corriger l intitulé de la discipline "-100 kg" en "- 100 kg"
 UPDATE discipline
 SET intitule = ' - 100 kg'
 WHERE intitule = ' -100 kg';
