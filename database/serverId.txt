@@ -1,0 +1,2 @@
+l2info12 passwd l2info
+psql -h licinfo.univ-jfc.fr -p 5432 -U l2info12 -d l2info12

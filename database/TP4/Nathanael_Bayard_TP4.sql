@@ -81,7 +81,8 @@ SELECT nom, prenom FROM Client;
 SELECT nom, prenom FROM Client WHERE Lower(ville) = 'lyon';
 
 \echo Question 6: Commandes en quantité au moins égale à 3.
-SELECT * FROM commande WHERE quantite >= 3;
+SELECT * FROM commande WHERE quantite >= 3
+ORDER BY numcli ASC, numprod DESC;
 
 \echo Question 7: Désignation des produits dont le prix est compris entre 50 et 100 F.
 SELECT desi FROM produit WHERE prixuni BETWEEN 50 AND 100;
@@ -91,3 +92,37 @@ SELECT * FROM commande WHERE quantite IS NULL;
 
 \echo Question 9: Nom et ville des clients dont la ville contient la chaîne "ll".
 SELECT nom, ville FROM Client WHERE ville LIKE '%ll%';
+
+\echo Question 10: Prénom des clients dont le nom est Dupont, Durand, ou Martin
+SELECT prenom FROM Client WHERE nom IN ('Dupont', 'Durand', 'Martin');
+
+\echo Question 11: Moyenne des prix des produits.
+SELECT AVG (ALL prixuni) FROM Produit;
+
+\echo Question 12: Nombre total de commandes.
+SELECT COUNT (*) FROM Commande;
+
+\echo Question 13: Liste des commandes avec le nom des clients.
+SELECT nom, datec, quantite FROM Commande LEFT OUTER JOIN Client ON Client.numcli = Commande.numcli;
+
+\echo Question 14: Liste des commandes avec le numéro et le nom des clients.
+SELECT Client.numcli, nom, datec, quantite FROM Commande LEFT OUTER JOIN Client ON Client.numcli = Commande.numcli;
+
+\echo Question 15: Nombre des clients qui ont commandé une quantité de 1.
+SELECT DISTINCT nom
+FROM Client INNER JOIN Commande ON Client.numcli = Commande.numcli
+WHERE quantite = 1
+ORDER BY nom ASC;
+
+\echo Question 16: Quantité totale commandée par chaque client (donner le numéro de client).
+SELECT numcli, SUM (quantite)
+FROM Commande
+GROUP BY numcli
+ORDER BY numcli ASC;
+
+\echo Question 17: Quantité moyenne commandée pour les produits faisant l'objet de plus d'une commande.
+SELECT numprod, AVG (quantite)
+FROM Commande
+GROUP BY numprod
+HAVING COUNT (*) > 1
+ORDER BY numprod ASC;
