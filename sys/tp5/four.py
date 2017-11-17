@@ -10,6 +10,7 @@ if res == 0:
 	print("i, luke, am eating my sandwich")
 else:
 	n = 5
+	print("pidof luke = " + str(res))
 	print("i am darth vader, and i'mma wait " + str(n) + " secs before eating my sandwich cuz i'm famished")
 	time.sleep(n)
 	print("i, darth vader, am eating my sandwitch")
