@@ -12,6 +12,15 @@ from List import toPrettyStringLL, toPrettyString, flatten, asLines
 from Either import Left
 from Matrix import matrixOfFamily
 
+# TODO:
+# pdf
+# commentaires + sig
+
+# sage part 1
+
+# store answers for part 3
+# parse answers in sage for part 3 
+
 
 def systemsFromFile(filepath):
     try:

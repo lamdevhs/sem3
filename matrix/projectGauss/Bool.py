@@ -28,18 +28,18 @@ def forany(l, condition):
 
 
 # predicate combinators
-def allTrue(*args):
-    def f(x):
-        return reduce(andBool, map(lambda f: f(x), args), True)
-    return f
+#def allTrue(*args):
+#    def f(x):
+#        return reduce(andBool, map(lambda f: f(x), args), True)
+#    return f
 
 def anyTrue(*args):
     def f(x):
         return reduce(orBool, map(lambda f: f(x), args), False)
     return f
 
-def noneTrue(*args):
-    return not_(anyTrue(*args))
+#def noneTrue(*args):
+#    return not_(anyTrue(*args))
 
 def not_(boolFn):
     def negation(*args):

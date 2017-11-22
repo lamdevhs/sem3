@@ -2,7 +2,7 @@
 """
 Author: Nathanael Bayard
 Module Name: List
-Description: list-related tools.
+Description: list/string-related tools.
 """
 
 from Bool import not_
@@ -43,9 +43,9 @@ def filterOutIx(ixList, l):
     return out
 
 
-# accumulators
-def count(condition, xs):
-    return len(filter(condition, xs))
+## accumulators
+#def count(condition, xs):
+#    return len(filter(condition, xs))
 
 
 # searches
@@ -67,8 +67,8 @@ def isolateItem(xs, index):
     rest = xs[:index] + xs[index +1 :]
     return (xs[index], rest)
 
-def insert(xs, x, index):
-    return xs[:].insert(index, x)
+#def insert(xs, x, index):
+#    return xs[:].insert(index, x)
 
 def grouped(xs, size):
     if len(xs) < size:
@@ -101,7 +101,8 @@ def toPrettyString(L):
 def toPrettyStringLL(LL):
     if LL == []:
         return
-    strLL = mapLL(str, LL)
+        
+    strLL = mapLL(toStr, LL)
     flattened = flatten(strLL)
     if flattened == []:
         return
@@ -118,6 +119,28 @@ def padded(string, desiredSize):
     if paddingSize <= 0:
         return string
     return strReplicate(paddingSize, " ") + string
+
+
+
+def dummy_func():
+    pass
+functionClass = dummy_func.__class__
+
+dummy_list = []
+listClass = dummy_list.__class__
+dummy_tuple = (1,2,3)
+tupleClass = dummy_tuple.__class__
+
+def toStr(x):
+    return str(funcToStr(x))
+
+def funcToStr(x):
+    if x.__class__ == functionClass:
+        return "<" + x.func_name + ">"
+    elif x.__class__ == listClass or x.__class__ == tupleClass:
+        return map(funcToStr, x)
+    else:
+        return x
 
 #LL = [[1, -1, 0.3, Fraction(7,4), "wawaaaaaaa"]]
 #prettyPrintLL(LL)

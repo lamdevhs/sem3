@@ -8,11 +8,25 @@ Description:
 """
 
 from List import zipWith, firstIndex, isolateItem, notFound, unzipWith, subtractLists, filterOutIx
-from Bool import forall, isZero
+from Bool import forall, isZero #, not_
 from Maybe import Maybe, Just, Nothing
-from Matrix import idMatrix, nullVector, firstNonNullEachLine, negate, unitVector, transposed
+from Matrix import idMatrix, nullVector, firstNonNullEachLine, negate, unitVector, familyFromMatrix #, \
+    # familyMatrixProd, completingBasis, isNullVector, isNullMatrix, matrixVecProd
 
 
+class System():
+    def __init__(self, pivotalLines, nonPivotalLines):
+        self.pivotalLines = pivotalLines
+        self.nonPivotalLines = nonPivotalLines
+    def fromList(lines):
+        pass
+    def lastColIndex(self):
+        if self.pivotalLines != []:
+            return len(self.pivotalLines[0]) - 2
+        elif self.nonPivotalLines != []:
+            return len(self.nonPivotalLines[0]) - 2
+        else:
+            raise Exception() # should never happen
 
 def isValidLine(line):
     leftSide = line[:-1]
@@ -32,20 +46,6 @@ def maybeSystemFromMatrix(matrix, rightSide):
         return line + [rightValue]
     fusedLines = zipWith(fuseToEnd, matrix, rightSide)
     return maybeSystem([], fusedLines)
-    
-class System():
-    def __init__(self, pivotalLines, nonPivotalLines):
-        self.pivotalLines = pivotalLines
-        self.nonPivotalLines = nonPivotalLines
-    def fromList(lines):
-        pass
-    def lastColIndex(self):
-        if self.pivotalLines != []:
-            return len(self.pivotalLines[0]) - 2
-        elif self.nonPivotalLines != []:
-            return len(self.nonPivotalLines[0]) - 2
-        else:
-            raise Exception() # should never happen
             
         
 def findPivot(system, colIndex):
@@ -112,13 +112,10 @@ def normalized(system):
     # check if some nonPivotalLines have non-empty values, esp in the last column (the right side of the equation)
     return maybeSystem(normalizedPivotalLines, system.nonPivotalLines)
 
-
 def splitSides(line):
     leftSide = line[:-1]
     rightSide = line[-1]
     return (leftSide, rightSide)
-
-
 
 def extractSolution(system):
     lines = system.pivotalLines
@@ -136,17 +133,33 @@ def extractSolution(system):
         rightVector.insert(index, 0)
     #print "filled"
     #printMatrix(leftMatrix)
-    kernelBasis = filterOutIx(pivotalColIndexes, transposed(leftMatrix))
+    kernelBasis = filterOutIx(pivotalColIndexes, familyFromMatrix(leftMatrix))
     particularSolution = rightVector
     return (kernelBasis, particularSolution)
 
-
-def gaussMethod(matrix, rightSide):
+def solution(matrix, rightSide):
     maybeSolution = maybeSystemFromMatrix(matrix, rightSide
         ).maybeDo(echelonized, 0
         ).maybeDo(normalized
         ).maybeApply(extractSolution)
-    if maybeSolution == Nothing:
-        return Nothing
-    (kernelBasis, particularSolution) = maybeSolution.value
-    return Just((kernelBasis, particularSolution))
+    return maybeSolution
+
+#def testSolution(affine, matrix, rightSide):
+#    (kerBasis, pSol) = affine
+#    
+#    #print "kb, m", kerBasis, matrix
+#    dim = len(pSol)
+#    kerBasisImage = familyMatrixProd(matrix, kerBasis)
+#    kerBasisComplement = completingBasis(kerBasis, dim)
+#    kerBasisComplementImage = familyMatrixProd(matrix, kerBasisComplement)
+#    goodKerBasis = isNullMatrix(kerBasisImage) and \
+#        forall(kerBasisComplementImage, not_(isNullVector))
+#    goodPSol = matrixVecProd(matrix, pSol) == rightSide
+#    #return goodKerBasis and matrixVecProd(matrix, pSol) == rightSide
+#    
+#    out = ""
+#    if not goodKerBasis:
+#        out += " badKerBasis "
+#    if not goodPSol:
+#        out += " badPSol " + str(matrixVecProd(matrix, pSol))
+#    return out

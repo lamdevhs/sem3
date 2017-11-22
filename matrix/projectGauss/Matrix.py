@@ -12,7 +12,6 @@ from List import count, zipWith, filterOutIx, firstIndex
 
 
 # constructors
-
 def nullVector(dim):
     return [0 for i in range(dim)]
 
@@ -57,7 +56,6 @@ def isNullMatrix(matrix):
 def firstNonNullEachLine(matrix):
     return map(lambda line: firstIndex(isNotZero, line), matrix)
 
-
 # modificators
 def transposed(matrix):
     if matrix == []:
@@ -71,162 +69,15 @@ def transposed(matrix):
 def negate(matrix):
     return mapMatrix(lambda x: -x, matrix)
 
-
 # mapping
 def mapMatrix(f, matrix):
     def g(line):
         return map(f, line)
     return map(g, matrix)
 
-
-
-
-
-# math stuff
+# family stuff
 def familyFromMatrix(matrix):
     return transposed(matrix)
 
 def matrixOfFamily(family):
     return transposed(family)
-
-def matrixRank(matrix):
-    reducedMat = reducedMatrix(matrix)
-    return count(not_(isNullVector), reducedMat)
-
-def familyRank(family):
-    return matrixRank(matrixOfFamily(family))
-
-def isFreeFamily(family):
-    return familyRank(family) == len(family)
-
-def isIn(vector, family, isFree = False):
-    if family == []:
-        return False
-    dimSpace = len(vector)
-    dimSubspace = familyRank(family)
-    if dimSpace == dimSubspace:
-        return True
-    else:
-        return familyRank(family + [vector]) == dimSubspace
-
-
-
-# matrix product
-def scalarMul(matrix, coeff):
-    return mapMatrix(lambda term: term * coeff, matrix)
-    
-def add(x, y):
-    return x + y
-def multiply(x, y):
-    return x * y
-
-
-def scalarProd(v, w):
-    if len(v) != len(w) or len(v) == 0:
-        print "can't multiply those", v, w
-        raise Exception()
-    return reduce(add, zipWith(multiply, v, w))
-
-def matrixVecProd(M, V):
-    n = nrows(M)
-    p = ncols(M)
-    p2 = nrows(V)
-    #q = 1
-    if n == 0 or p == 0:
-        return []
-    if p != p2:
-        print "can't multiply those:", M, V
-        raise Exception()
-    out = nullVector(p)
-    for i in range(n):
-        out[i] = scalarProd(M[i], V)
-    return out
-
-def matrixProd(M, N):
-    n = nrows(M)
-    p = ncols(M)
-    p2 = nrows(N)
-    q = ncols(N)
-    tN = transposed(N)
-    if n == 0 or p == 0 or q == 0:
-        return []
-    if p != p2:
-        print "can't multiply those:", M, N
-        raise Exception()
-    out = nullMatrix(n, q)
-    for i in range(n):
-        for j in range(q):
-            out[i][j] = scalarProd(M[i], tN[j])
-    return out
-
-def familyMatrixProd(matrix, family):
-    return map(lambda vec: matrixVecProd(matrix, vec), family)
-
-
-# basis
-def completingBasis(echelonizedBasis, dim):
-    indexes = firstNonNullEachLine(echelonizedBasis)
-    unitaryVectors = idMatrix(dim)
-    return filterOutIx(indexes, unitaryVectors)
-
-def completedBasis(echelonizedBasis, dim):
-    if echelonizedBasis == []:
-        print "can't complete basis, unknown dimension"
-        raise Exception()
-    indexes = firstNonNullEachLine(echelonizedBasis)
-    dim = len(echelonizedBasis[0])
-    unitaryVectors = idMatrix(dim)
-    return echelonizedBasis + filterOutIx(indexes, unitaryVectors)
-
-def testResults(affine, matrix, rightSide):
-    (kerBasis, pSol) = affine
-    
-    #print "kb, m", kerBasis, matrix
-    dim = len(pSol)
-    kerBasisImage = familyMatrixProd(matrix, kerBasis)
-    kerBasisComplement = completingBasis(kerBasis, dim)
-    kerBasisComplementImage = familyMatrixProd(matrix, kerBasisComplement)
-    goodKerBasis = isNullMatrix(kerBasisImage) and \
-        forall(kerBasisComplementImage, not_(isNullVector))
-    goodPSol = matrixVecProd(matrix, pSol) == rightSide
-    #return goodKerBasis and matrixVecProd(matrix, pSol) == rightSide
-    
-    out = ""
-    if not goodKerBasis:
-        out += " badKerBasis "
-    if not goodPSol:
-        out += " badPSol " + str(matrixVecProd(matrix, pSol))
-    return out
-    
-
-    
-    
-#def printMatrix(matrix):
-#    n = len(matrix)
-#    if n == 0:
-#        print "[empty matrix]"
-#        return
-#    p = len(matrix[0])
-#    for i in range(n):
-#        for j in range(p):
-#            print matrix[i][j], " ",
-#        print ""
-
-
-def _tests():
-    L = [[1,2,0,1,0,1],
-                    [1,0,1,2,1,6],
-                    [2,5,-2,1./2,0,4],
-                    [1,1,-1,1./3,0,0]
-                       ]
-    R = [0,0,0,0,0,0]
-    printMatrix(L)
-    print gaussMethod(L, R)
-    L = [[1,2,0,1,0,1],
-                        [1,2,0,1,0,1],
-                        [2,5,-2,1./2,0,4],
-                        [1,1,-1,1./3,0,0]
-                       ]
-    R = [0,0,0,0,0,0]
-    printMatrix(L)
-    print gaussMethod(L, R)
