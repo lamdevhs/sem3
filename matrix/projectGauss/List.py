@@ -73,8 +73,11 @@ def isolateItem(xs, index):
 def grouped(xs, size):
     if len(xs) < size:
         return []
-    numberOfGroups = len(xs) / int(size)
-    return [xs[i:size+i] for i in range(numberOfGroups)]
+    numberOfGroups = int(len(xs)) / int(size)
+    out = []
+    for i in range(numberOfGroups):
+        out.append(xs[i*size:(i+1)*size])
+    return out
     
 # constructors
 def replicate(amount, pattern):
@@ -92,20 +95,33 @@ def flatten(LL):
 
 
 # pretty printing
-def asLines(strL):
-    return "\n".join(strL)
+def asLines(L):
+    return "\n".join(map(str, L))
+
+#     if len(strL) == 0:
+#         return ""
+#     if len(strL) == 1:
+#         return strL[0]
+#     out = strL[0]
+#     rest = strL[1:]
+#     for s in rest:
+#         out += "\n" + s
+#     return out
+
+def asWords(L):
+    return " ".join(map(str, L))
 
 def toPrettyString(L):
-    toPrettyStringLL([L])
+    return toPrettyStringLL([L])
 
 def toPrettyStringLL(LL):
     if LL == []:
-        return
+        return ""
         
     strLL = mapLL(toStr, LL)
     flattened = flatten(strLL)
     if flattened == []:
-        return
+        return ""
     maxLen = max(map(len, flattened))
     colWidth = maxLen + 3
     paddedLL = mapLL(lambda string: padded(string, colWidth), strLL)

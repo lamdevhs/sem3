@@ -37,7 +37,7 @@ def isNat(token):
 
 def parseGroup(tup):
     def Error(index, message):
-        return Left("group #" + str(index) + ": " + message)    
+        return Left("system #" + str(index) + ": " + message)    
     
     (group, index) = tup
     one = group[0].split()
