@@ -1,4 +1,4 @@
-from List import zipWith, unzipWith, filterOut, subtractLists
+from List import zipWith, unzipWith, filterOut, subtractLists, filterOutIx
 from List import toPrettyStringLL
 
 
@@ -33,7 +33,8 @@ class Test():
                         "real output"]] + self.results
             print toPrettyStringLL(report)
 
-def allTests():
+def moduleList():
+    # bimap
     # zipWith :: (a . b -> c) . List a . List b -> List c
     def f(a, b):
         return a + b
@@ -89,7 +90,7 @@ def allTests():
                  testName = "subtract empty list"
         ).printResults()
 
-    # filterOutIx :: List Integer . List a -> List a
+    # filterOutIx :: List Index . List a -> List a
     Test(filterOutIx
         ).check( input = ([1,2,3], ["a", "b", "c", "d", "e"]),
                  output = ["a", "e"],
@@ -97,12 +98,17 @@ def allTests():
         ).check( input = ([], [1,2,3,4,5]),
                  output = [1,2,3,4,5],
                  testName = "ix list empty"
-        ).check( input = ([7,8,9], [1,2,3,4,5,6]),
-                 output = [7,8,9],
-                 testName = "disjoint lists"
+        ).check( input = ([7,8,9], [1,2]),
+                 output = [1,2],
+                 testName = "incorrect indexes"
         ).check( input = ([1,2,3], []),
-                 output = [1,2,3],
-                 testName = "subtract empty list"
+                 output = [],
+                 testName = "empty list"
         ).printResults()
+    
+    # 
+
+def allTests():
+    moduleList()
 
 allTests()

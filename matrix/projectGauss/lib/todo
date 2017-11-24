@@ -1,0 +1,6 @@
+pdf:
+	- mention typology of type variables
+	- mention typology for exceptions, and for heterogeneous lists
+	- smoothe exception throwing
+	- mention aliases: Index, Int, Bool
+	- use Maybe for failure

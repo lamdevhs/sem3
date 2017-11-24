@@ -6,25 +6,31 @@ Description: list/string-related tools.
 """
 
 from Bool import not_
+from Maybe import Nothing, Just
 
-# bimap : (a . b -> c) . List (a, b) -> List c
+# akin to `map : (a -> b) . List a -> List b`
+# but the first parameter is a function of two arguments,
+# and the list is a list of tuples.
 def bimap(f, tupList):
+# bimap : (a . b -> c) . List (a, b) -> List c
     out = []
     for tup in tupList:
         out.append(f(*tup))
     return out
 
-# zippers
-#def tupled(f):
-#    def g(tup):
-#        (x, y) = tup
-#        return f(*tup)
-#    return g
 
+# ==== zippers
+
+# zip two lists into a new one, using a function to combine the
+# elements of each lists.
 def zipWith(f, xs, ys):
+# zipWith : (a . b -> c) . List a . List b -> List c
     return bimap(f, zip(xs, ys))
 
+# the reverse operation to zipWith: generates two lists
+# from the elements of one list.
 def unzipWith(f, xys):
+# unzipWith : (a -> (b, c)) . List a -> (List b, List c)
     xs = []
     ys = []
     for e in xys:
@@ -33,14 +39,24 @@ def unzipWith(f, xys):
         ys.append(y)
     return (xs, ys)
 
-# filters
+# ==== filters
+
+# like filter in reverse: the elements kept are those that don't
+# verify the predicate
 def filterOut(f, xs):
+# filterOut : (a -> Bool) . List a -> List a
     return filter(not_(f), xs)
 
+# returns the list of the elements of `xs` which aren't in `ys`.
 def subtractLists(xs, ys):
+# subtractLists : List a . List a -> List a
     return filter(lambda e: not e in ys, xs)
 
+# takes a list of indexes, then a second list
+# returns the elements of the second list whose indices
+# aren't in the first list
 def filterOutIx(ixList, l):
+# filterOutIx : List Int . List a -> List a
     out = []
     for i in range(len(l)):
         e = l[i]
@@ -49,59 +65,90 @@ def filterOutIx(ixList, l):
     return out
 
 
-## accumulators
-#def count(condition, xs):
-#    return len(filter(condition, xs))
+# ==== searches
 
-
-# searches
+# returns `Just` the index of the first item for which the
+# condition is checked. returns `Nothing` if no item matches
+# the condition.
 def firstIndex(condition, xs):
+# firstIndex : (a -> Bool) . List a -> Maybe Index
     for ix in range(len(xs)):
         x = xs[ix]
         if condition(x):
-            return ix
-    return failure
-
-failure = object()
-
-def notFound(ix):
-    return ix == failure
+            return Just(ix)
+    return Nothing
 
 
-# modificators
+# ==== modificators
+
+# small tool to add semantics to tests
+# for index-out-of-range related issues.
+def outOfRange(index, L):
+# outOfRange : Index . List a -> Bool
+    return len(L) <= index or index < 0
+
+# takes a list and an index; returns a tuple
+# containing the element at the given index,
+# and the rest of the elements of the list
+# will raise an exception of the index is out of range.
 def isolateItem(xs, index):
-    rest = xs[:index] + xs[index +1 :]
+# isolateItem : List a . Index -> (a, List a)
+    if outOfRange(index, L):
+        raise Exception()
+    rest = xs[:index] + xs[index + 1 :]
     return (xs[index], rest)
 
-#def insert(xs, x, index):
-#    return xs[:].insert(index, x)
-
+# takes a list and a size of groups
+# returns a list of lists; each sublist contains `size`
+# elements from the original list.
+# the final group is discarded if its size is too small.
+# e.g.: grouped([1,2,3,4,5,6,7], 2) == [[1,2], [3,4], [5,6]]
+#       grouped([1,2,3], 4) == []
 def grouped(xs, size):
-    if len(xs) < size:
-        return []
+# grouped : List a . Int -> List (List a)
     numberOfGroups = int(len(xs)) / int(size)
     out = []
     for i in range(numberOfGroups):
         out.append(xs[i*size:(i+1)*size])
     return out
     
-# constructors
+
+# ==== List constructors
+
+# takes an `amount : Int` and a value,
+# returns a list of `amount` times the given value.
+# e.g.: replicate(3, "foo") == ["foo", "foo", "foo"]
+#       replicate(0, "foo") == []
 def replicate(amount, pattern):
+# replicate : Int . a -> List a
     return [pattern for i in range(amount)]
 
-def strReplicate(amount, pattern):
-    return ''.join(replicate(amount, " "))
 
-# lists of lists
+# ==== lists of lists
+
+# akin to `map` but for lists of lists:
+# applies the input function to every subelement
+# and returns the resulting new list of lists.
 def mapLL(f, LL):
+# mapLL : (a -> b) . List (List a) -> List (List b)
     return map(lambda line: map(f, line), LL)
 
+# takes a lists of lists, and fuse each sublist
+# into one single "flat" list.
 def flatten(LL):
+# flatten : List (List a) -> List a
     return reduce(lambda line, line2: line + line2, LL, [])
 
+# ==== pretty printing
 
-# pretty printing
+# takes a list of values; returns one string with the string
+# representation of each value, one per line
+# (that is, separated by a newline).
+# python not being difficult at the type-level,
+# it can be a heterogeneous list in input.
+# e.g.: asLines([2, "foo", []]) == "2\nfoo\n[]"
 def asLines(L):
+# asLines : Line ? -> String
     return "\n".join(map(str, L))
 
 #     if len(strL) == 0:
