@@ -1,0 +1,2 @@
+noSolutionSymbol = "NOTHING"
+nullVecSpaceSymbol = "NullVecSpace"

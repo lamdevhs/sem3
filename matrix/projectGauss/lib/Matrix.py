@@ -5,7 +5,7 @@ Module Name: Matrix
 Description: functions to handle lists of lists representing numerical matrices.
 """
 from Bool import forall, not_, isNotZero
-from List import zipWith, filterOutIx, firstIndex
+from List import zipWith, filterOutIx, firstIndex, grouped
 
 #def columnSize(matrix):
 #    return len(matrix[0])
@@ -29,11 +29,12 @@ def idMatrix(dim):
 def matrixFromList(xs, n, p):
     if len(xs) != n * p:
         raise Exception()
-    matrix = nullMatrix(n, p)
-    for i in range(n*p):
-        lineIx = int(i) / int(p)
-        colIx = i - lineIx * p
-        matrix[lineIx][colIx] = xs[i]
+    matrix = grouped(xs, p)
+ #   matrix = nullMatrix(n, p)
+ #   for i in range(n*p):
+ #       lineIx = int(i) / int(p)
+ #       colIx = i - lineIx * p
+ #       matrix[lineIx][colIx] = xs[i]
     return matrix
 
 # transformers

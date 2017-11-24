@@ -7,16 +7,22 @@ Description: list/string-related tools.
 
 from Bool import not_
 
+# bimap : (a . b -> c) . List (a, b) -> List c
+def bimap(f, tupList):
+    out = []
+    for tup in tupList:
+        out.append(f(*tup))
+    return out
+
 # zippers
-def tupled(f):
-    def g(tup):
-        (x, y) = tup
-        return f(*tup)
-    return g
+#def tupled(f):
+#    def g(tup):
+#        (x, y) = tup
+#        return f(*tup)
+#    return g
 
 def zipWith(f, xs, ys):
-    xys = zip(xs, ys)
-    return map(tupled(f), xys)
+    return bimap(f, zip(xs, ys))
 
 def unzipWith(f, xys):
     xs = []
