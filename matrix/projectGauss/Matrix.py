@@ -5,7 +5,7 @@ Module Name: Matrix
 Description: functions to handle lists of lists representing numerical matrices.
 """
 from Bool import forall, not_, isNotZero
-from List import count, zipWith, filterOutIx, firstIndex
+from List import zipWith, filterOutIx, firstIndex
 
 #def columnSize(matrix):
 #    return len(matrix[0])

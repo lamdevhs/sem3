@@ -1,6 +1,6 @@
 from fractions import Fraction
 from Matrix import matrixFromList
-from System import solution, testSolution
+from System import systemSolution, testSolution
 
 def combinations(xs, amount):
     if xs == [] or amount == 0:
@@ -20,7 +20,7 @@ def overManyMatrices(do, dim, minVal, maxVal):
         ML = matrixFromList(L, dim, dim)
         for R in possibleRightSides:    
             #print ML, R
-            maybeSol = solution(ML, R)
+            maybeSol = systemSolution(ML, R)
             maybeTestRes = maybeSol.maybeApply(testSolution, ML, R)
             if not maybeTestRes.isNothing() and maybeTestRes.value != "":
                 print "--------------"

@@ -137,7 +137,7 @@ def extractSolution(system):
     particularSolution = rightVector
     return (kernelBasis, particularSolution)
 
-def solution(matrix, rightSide):
+def systemSolution(matrix, rightSide):
     maybeSolution = maybeSystemFromMatrix(matrix, rightSide
         ).maybeDo(echelonized, 0
         ).maybeDo(normalized
