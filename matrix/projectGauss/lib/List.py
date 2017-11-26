@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Author: Nathanael Bayard
 Module Name: List
@@ -7,6 +6,7 @@ Description: list/string-related tools.
 
 from Bool import not_
 from Maybe import Nothing, Just
+from Error import error
 
 # akin to `map : (a -> b) . List a -> List b`
 # but the first parameter is a function of two arguments,
@@ -41,8 +41,6 @@ def unzipWith(f, xys):
 
 # ==== filters
 
-# like filter in reverse: the elements kept are those that don't
-# verify the predicate
 def filterOut(f, xs):
 # filterOut : (a -> Bool) . List a -> List a
     return filter(not_(f), xs)
@@ -67,9 +65,8 @@ def filterOutIx(ixList, l):
 
 # ==== searches
 
-# returns `Just` the index of the first item for which the
-# condition is checked. returns `Nothing` if no item matches
-# the condition.
+# returns the index of the first
+# element that matches the predicate
 def firstIndex(condition, xs):
 # firstIndex : (a -> Bool) . List a -> Maybe Index
     for ix in range(len(xs)):
@@ -81,8 +78,6 @@ def firstIndex(condition, xs):
 
 # ==== modificators
 
-# small tool to add semantics to tests
-# for index-out-of-range related issues.
 def outOfRange(index, L):
 # outOfRange : Index . List a -> Bool
     return len(L) <= index or index < 0
@@ -93,12 +88,12 @@ def outOfRange(index, L):
 # will raise an exception of the index is out of range.
 def isolateItem(xs, index):
 # isolateItem : List a . Index -> (a, List a)
-    if outOfRange(index, L):
-        raise Exception()
+    if outOfRange(index, xs):
+        error(isolateItem, "out of range index")
     rest = xs[:index] + xs[index + 1 :]
     return (xs[index], rest)
 
-# takes a list and a size of groups
+# takes a list and a size of group
 # returns a list of lists; each sublist contains `size`
 # elements from the original list.
 # the final group is discarded if its size is too small.
@@ -106,6 +101,8 @@ def isolateItem(xs, index):
 #       grouped([1,2,3], 4) == []
 def grouped(xs, size):
 # grouped : List a . Int -> List (List a)
+    if size <= 0:
+        error(grouped, "group size must be non nul natural integer")
     numberOfGroups = int(len(xs)) / int(size)
     out = []
     for i in range(numberOfGroups):
@@ -115,14 +112,18 @@ def grouped(xs, size):
 
 # ==== List constructors
 
-# takes an `amount : Int` and a value,
-# returns a list of `amount` times the given value.
 # e.g.: replicate(3, "foo") == ["foo", "foo", "foo"]
 #       replicate(0, "foo") == []
+#       replicate(-1, "foo") == []
 def replicate(amount, pattern):
 # replicate : Int . a -> List a
     return [pattern for i in range(amount)]
 
+def strReplicate(amount, pattern):
+# strReplicate : Int . String -> String
+    if amount <= 0:
+        return ''
+    return pattern + strReplicate(amount - 1, pattern)
 
 # ==== lists of lists
 
@@ -141,68 +142,88 @@ def flatten(LL):
 
 # ==== pretty printing
 
-# takes a list of values; returns one string with the string
-# representation of each value, one per line
-# (that is, separated by a newline).
-# python not being difficult at the type-level,
-# it can be a heterogeneous list in input.
-# e.g.: asLines([2, "foo", []]) == "2\nfoo\n[]"
+# e.g.: asLines([4, [], "foo"]) == "4\n[]\nfoo"
 def asLines(L):
-# asLines : Line ? -> String
+# asLines : List a -> String
     return "\n".join(map(str, L))
 
-#     if len(strL) == 0:
-#         return ""
-#     if len(strL) == 1:
-#         return strL[0]
-#     out = strL[0]
-#     rest = strL[1:]
-#     for s in rest:
-#         out += "\n" + s
-#     return out
-
+# e.g.: asWords([4, [], "foo"]) == "4 [] foo"
 def asWords(L):
+# asWords : List a -> String
     return " ".join(map(str, L))
 
-def toPrettyString(L):
-    return toPrettyStringLL([L])
+def concatStrings(L):
+# concatStrings : List a -> String
+    return "".join(map(str, L))
 
+# function to print a list of lists of values
+# as an array with constant-sized columns
 def toPrettyStringLL(LL):
+# toPrettyStringLL : List a -> String
     if LL == []:
         return ""
         
+    # i use `toStr` (written below) instead of the built-in
+    # `str` because i want to be able to print
+    # lists of lists containing functions (cf UnitTest.py)
+    # and by default str(f) would write something like
+    # '<function f at 0x7f510ce826e0>'
+    # which is ugly and verbose
     strLL = mapLL(toStr, LL)
-    flattened = flatten(strLL)
+    
+    flattened = flatten(strLL) # flattened so i can use max below
     if flattened == []:
         return ""
+    
     maxLen = max(map(len, flattened))
-    colWidth = maxLen + 3
-    paddedLL = mapLL(lambda string: padded(string, colWidth), strLL)
-    out = []
-    for line in paddedLL:
-        out.append("".join(line))
-    return asLines(out)
+    constantWidth = maxLen + 3
+    
+    # i add some custom padding to each value of strLL
+    # so they each have the same constantWidth
+    paddedLL = mapLL(lambda string: padded(string, constantWidth), strLL)
+   
+    # fuse the elements of each sublist
+    lines = map(concatStrings, paddedLL)
+    
+    # fuse the sublists with \n
+    return asLines(lines)
 
-def padded(string, desiredSize):
-    paddingSize = desiredSize - len(string)
+# completes a string with space to its left so its length
+# matches a desired value
+def padded(string, desiredLength):
+    paddingSize = desiredLength - len(string)
     if paddingSize <= 0:
         return string
     return strReplicate(paddingSize, " ") + string
 
+def toPrettyString(L):
+# toPrettyString : Line a -> String
+    return toPrettyStringLL([L])
 
+
+
+# all that follows, up to the definition of `toStr`
+# is used to check the type of objects
 
 def dummy_func():
     pass
-functionClass = dummy_func.__class__
-
+dummy_tuple = (1,2,3) # for some reason python calls "tuple" any n-uple of whichever size `n`
 dummy_list = []
+
 listClass = dummy_list.__class__
-dummy_tuple = (1,2,3)
+functionClass = dummy_func.__class__
 tupleClass = dummy_tuple.__class__
 
+# toStr : a -> String
 def toStr(x):
+    # recursively uses `funcToStr` to replace
+    # functions with their __name__ attribute
+    # (which is a string) then use the built-in
+    # `str` over the result as per usual.
     return str(funcToStr(x))
 
+# this function's type is vaguely complex, since it literally
+# depends on its input values (aka it pertains to type dependency)
 def funcToStr(x):
     if x.__class__ == functionClass:
         return "<" + x.func_name + ">"
@@ -210,7 +231,3 @@ def funcToStr(x):
         return map(funcToStr, x)
     else:
         return x
-
-#LL = [[1, -1, 0.3, Fraction(7,4), "wawaaaaaaa"]]
-#prettyPrintLL(LL)
-#prettyPrintLL([])

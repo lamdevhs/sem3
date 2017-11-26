@@ -1,5 +1,12 @@
-# -*- coding: utf-8 -*-
- 
+"""
+Author: Nathanael Bayard
+Module Name: UI
+Description:
+    functions used to create a minimal UI, used in common by all three parts.
+    due to compatibility issues between Sage and vanilla Python, some functions
+    below require as arguments some basic IO functions like 'getInput', used
+    to ask the user some string as input for the program.
+"""
 
 from Either import Left, Right
 

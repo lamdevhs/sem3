@@ -1,6 +1,15 @@
-from List import zipWith, unzipWith, filterOut, subtractLists, filterOutIx
+"""
+Author: Nathanael Bayard
+Module Name: UnitTests
+Description: module used for unit tests of the various modules of the program.
+             warning: contains one instruction that actually calls a function, at
+             the end of the file.
+"""
 from List import toPrettyStringLL
 
+# for testing:
+from unitTests.ListTests import testingList
+from unitTests.BoolTests import testingBool
 
 class Test():
     def __init__(self, functionToTest):
@@ -33,82 +42,14 @@ class Test():
                         "real output"]] + self.results
             print toPrettyStringLL(report)
 
-def moduleList():
-    # bimap
-    # zipWith :: (a . b -> c) . List a . List b -> List c
-    def f(a, b):
-        return a + b
-    Test(zipWith
-        ).check( input = [f, [1,2,3], [4,5,6]],
-                 output = [5,7,9],
-                 testName = "addition"
-        ).check( input = [f, [], []],
-                 output = [],
-                 testName = "empty lists"
-        ).check( input = (f, [10], [1,2,3]),
-                 output = [11],
-                 testName = "lists of different sizes"
-        ).printResults()
-
-    # unzipWith :: (a -> (b, c)) . List a -> (List b, List c)
-    def f(a):
-        return (a[:1], a[1:])
-    Test(unzipWith
-        ).check( input = (f, ["abc", "tree", "bird"]),
-                 output = (["a", "t", "b"], ["bc", "ree", "ird"]),
-                 testName = "beheading"
-        ).check( input = [f, []],
-                 output = ([], []),
-                 testName = "empty lists"
-        ).printResults()
-
-    # filterOut :: (a -> Bool) . List a -> List a
-    def f(x):
-        return x % 2 == 0
-    Test(filterOut
-        ).check( input = (f, [1,2,3,4,5,6]),
-                 output = [1,3,5],
-                 testName = "remove pairs"
-        ).check( input = (f, []),
-                 output = [],
-                 testName = "empty list"
-        ).printResults()
-    
-    # subtractLists :: List a . List a -> List a
-    Test(subtractLists
-        ).check( input = ([1,2,3], [2,3]),
-                 output = [1],
-                 testName = "subtract"
-        ).check( input = ([1,2,3], [1,2,3]),
-                 output = [],
-                 testName = "subtract itself"
-        ).check( input = ([7,8,9], [1,2,3,4,5,6]),
-                 output = [7,8,9],
-                 testName = "disjoint lists"
-        ).check( input = ([1,2,3], []),
-                 output = [1,2,3],
-                 testName = "subtract empty list"
-        ).printResults()
-
-    # filterOutIx :: List Index . List a -> List a
-    Test(filterOutIx
-        ).check( input = ([1,2,3], ["a", "b", "c", "d", "e"]),
-                 output = ["a", "e"],
-                 testName = "1 to 3"
-        ).check( input = ([], [1,2,3,4,5]),
-                 output = [1,2,3,4,5],
-                 testName = "ix list empty"
-        ).check( input = ([7,8,9], [1,2]),
-                 output = [1,2],
-                 testName = "incorrect indexes"
-        ).check( input = ([1,2,3], []),
-                 output = [],
-                 testName = "empty list"
-        ).printResults()
-    
-    # 
-
 def allTests():
-    moduleList()
+    testingList(Test)
+    testingBool(Test)
 
 allTests()
+
+
+
+
+
+
