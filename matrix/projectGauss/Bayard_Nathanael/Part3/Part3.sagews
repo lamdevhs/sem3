@@ -1,3 +1,4 @@
+︠ee65c268-51fc-432c-962f-0f3d461d2ff7r︠
 from ParsingPart3 import parseFilePart3
 from Maybe import Just, Nothing
 from List import bimap
@@ -138,3 +139,14 @@ def showSolution(origin, maybeSolution):
     show(pSolution)
     
 promptPart3()
+
+︡c0ed652f-7a10-4705-826e-2321e7c9b11a︡{"stdout":"Part 3: Checking unicity of solutions found\n\n\nEnter filepath of file containing the systems and their solutions. (they should be called test1.solutions and test2.solutions.) (Type `:q` to quit.)\n"}︡{"raw_input":{"prompt":""}}︡{"delete_last":true}︡{"raw_input":{"prompt":"","submitted":true,"value":"test1.solutions"}}︡{"stdout":"File parsed successfully."}︡{"stdout":"\n"}︡{"html":"<div align='center'>all solutions were found consistent between python and sage.</div>"}︡{"html":"<div align='center'>no more systems/solutions in this file.</div>"}︡{"stdout":"\n\nEnter filepath of file containing the systems and their solutions. (they should be called test1.solutions and test2.solutions.) (Type `:q` to quit.)\n"}︡{"raw_input":{"prompt":""}}︡{"delete_last":true}︡{"raw_input":{"prompt":"","submitted":true,"value":"test2.solutions"}}︡{"stdout":"File parsed successfully."}︡{"stdout":"\n"}︡{"html":"<div align='center'>all solutions were found consistent between python and sage.</div>"}︡{"html":"<div align='center'>no more systems/solutions in this file.</div>"}︡{"stdout":"\n\nEnter filepath of file containing the systems and their solutions. (they should be called test1.solutions and test2.solutions.) (Type `:q` to quit.)\n"}︡{"raw_input":{"prompt":""}}
+
+
+
+
+
+
+
+
+

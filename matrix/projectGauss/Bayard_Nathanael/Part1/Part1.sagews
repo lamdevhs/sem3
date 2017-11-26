@@ -1,3 +1,4 @@
+︠41c756b3-dbb3-46a3-93eb-71f6caaf9232s︠
 from UI import prompt
 from ParsingPart12 import parseFilePart12
 from List import bimap
@@ -85,3 +86,12 @@ def printResult(system, solution):
     sleep(0.1)
 
 promptPart1()
+
+
+
+
+
+
+
+
+
