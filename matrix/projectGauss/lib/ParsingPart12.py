@@ -1,35 +1,23 @@
-from lib.Bool import forall
-from lib.Matrix import matrixFromList
-from lib.Either import Left, Right
-from lib.List import filterOut
-from lib.Parsing import noise, parseByGroup, isNat
+from Bool import forall
+from Matrix import matrixFromList
+from Either import Left, Right
+from List import filterOut
+from Parsing import noise, parseByGroup, isNat
 
-__SAGE__ = False
-
-if __SAGE__:
-    def Fraction(x):
-        return Rational(x)
-    
-    def isFraction(token):
-        try:
-            Rational(token)
-            return True
-        except:
-            return False
-else:
-    from fractions import Fraction
-    def isFraction(token):
-        try:
-            Fraction(token)
-            return True
-        except:
-            return False
 
 def parseGroup(fractionMaker):
+    def isFraction(token):
+        try:
+            fractionMaker(token)
+            return True
+        except:
+            return False
+
+
     def _parseGroup(tup):
         def Error(index, message):
 	    return Left("system #" + str(index) + ": " + message)    
-    
+        
         (group, index) = tup
         one = group[0].split()
         two = group[1].split()

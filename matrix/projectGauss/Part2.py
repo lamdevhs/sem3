@@ -3,18 +3,19 @@ from lib.List import toPrettyStringLL, toPrettyString, flatten, asLines, asWords
 from lib.System import systemSolution
 from lib.Matrix import matrixOfFamily
 from lib.Symbols import noSolutionSymbol, nullVecSpaceSymbol
+from lib.Maybe import Just, Nothing
 
-from ParsingPart12 import parseFilePart12
+from lib.ParsingPart12 import parseFilePart12
 
 from fractions import Fraction
-
 import os
 workingDir = os.path.dirname(os.path.realpath(__file__))
 
 
 def promptPart2():
     prompt(title = "Part 2: Interactive linear system solver.",
-           request = "Enter filepath of file containing the systems to solve.",
+           request = "Enter filepath of file containing the systems to solve.\n"
+                   + "(they should be 'test0', 'test1' and 'test2')",
            parser = parseFilePart12(fractionMaker = Fraction),
            callback = solver,
            getInput = getInput)
@@ -43,11 +44,11 @@ def printResult(system, solution):
     print toPrettyStringLL(leftSide)
     print "rightSide vector:"
     print toPrettyString(rightSide)
-    if solution.isNothing():
+    if solution == Nothing:
         print "system was found unsolvable. the solution space is the empty set"
         return
-    (kernelBasis, pSolution) = solution.value
-    if kernelBasis == []:
+    (kernelBasis, pSolution) = solution.justValue()
+    if 0 == len(kernelBasis):
         print "kernel of left matrix is reduced to {vector null}."
     else:
         print "basis of kernel of left matrix:"
@@ -73,11 +74,11 @@ def sysAndSolToString(system, solution):
     out = ["#", asWords(rightSide),
            asWords(flatten(leftSide))]
 
-    if solution.isNothing():
+    if solution == Nothing:
         out += [noSolutionSymbol, noSolutionSymbol]
     else:
-        (kerBasis, pSol) = solution.value
-        if kerBasis == []:
+        (kerBasis, pSol) = solution.justValue()
+        if 0 == len(kerBasis):
             kerStr = nullVecSpaceSymbol
         else:
             kerStr = asWords(flatten(kerBasis))
