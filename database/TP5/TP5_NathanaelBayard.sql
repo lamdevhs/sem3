@@ -87,10 +87,10 @@ AND D.code_discipline = GI.code_discipline;
 
 \echo p. Nom et date de naissance des sportifs plus jeune que Jean-Noel Ferrari.
 SELECT S.nom, S.date_naiss
-FROM sportif S, sportif
-WHERE S.date_naiss > sportif.date_naiss
-AND Lower(sportif.nom) = 'ferrari'
-AND Lower(sportif.prenom) = 'jean-noel';
+FROM sportif S, sportif Ferrari
+WHERE S.date_naiss > Ferrari.date_naiss
+AND Lower(Ferrari.nom) = 'ferrari'
+AND Lower(Ferrari.prenom) = 'jean-noel';
 
 \echo q. Nom et médaille obtenue en individuel pour tous les escrimeurs
 SELECT nom, medaille
@@ -98,3 +98,77 @@ FROM sportif SP, sport S, gagner_individuel GI
 WHERE Lower(S.intitule) = 'escrime'
 AND S.code_sport = SP.code_sport
 AND GI.num_licence = SP.num_licence;
+
+\echo r. Composition de l-equipe du <Quatre sans barreur>
+SELECT SP.*
+FROM sportif SP, appartenir_equipe AE, equipe E
+WHERE Lower(E.denomination) = 'quatre sans barreur'
+AND   AE.num_equipe = E.num_equipe
+AND   SP.num_licence = AE.num_licence;
+
+\echo s. Nom des sportifs qui ont eu une médaille d-or collective
+SELECT SP.nom, AE.num_equipe
+FROM sportif SP, appartenir_equipe AE, gagner_collectif GC
+WHERE Lower(GC.medaille) = 'or'
+AND   GC.num_equipe = AE.num_equipe
+AND   SP.num_licence = AE.num_licence;
+
+\echo t. Denomination des equipes pour lesquelles on ne connait pas la composition.
+(SELECT DISTINCT E.num_equipe
+FROM equipe E)
+EXCEPT
+(SELECT DISTINCT AE.num_equipe
+FROM appartenir_equipe AE);
+
+\echo u. Donner le nombre de sports aux JO de Sydney.
+SELECT COUNT (S.code_sport) AS "nb sports aux JO de sydney"
+FROM sport S;
+
+\echo v. Obtenir le nombre de médailles individuelles par type.
+SELECT GI.medaille, COUNT (GI.medaille) AS "medailles individuelles"
+FROM gagner_individuel GI
+GROUP BY GI.medaille;
+
+\echo w. Liste de tous les sportifs (nom) avec pour chacun le nombre de médailles individuelles.
+SELECT SP.nom, GI.medaille,
+       COUNT (GI.medaille) AS "medailles individuelles"
+FROM sportif SP, gagner_individuel GI
+WHERE GI.num_licence = SP.num_licence
+GROUP BY SP.nom, GI.medaille;
+
+\echo x. Nom des sportifs qui ont gagné deux médailles en individuel.
+SELECT SP.nom
+FROM gagner_individuel GI, sportif SP
+WHERE GI.num_licence = SP.num_licence
+GROUP BY SP.num_licence
+HAVING COUNT (SP.num_licence) = 2;
+
+\echo y. Nom des sportifs ayant gagné autant de médailles collectives que David Douillet en individuel.
+SELECT SP.nom
+FROM gagner_collectif GC, sportif SP, appartenir_equipe AE
+WHERE GC.num_equipe = AE.num_equipe
+AND   AE.num_licence = SP.num_licence
+GROUP BY SP.num_licence
+HAVING  COUNT (SP.num_licence) IN
+    (SELECT COUNT (*) AS DDnbMedailles
+     FROM   gagner_individuel GI, sportif SP
+     WHERE  SP.nom = 'Douillet'
+     AND    SP.prenom = 'David'
+     AND    GI.num_licence = SP.num_licence);
+
+\echo z. Pour chaque sport, le nombre de médailles collectives.
+SELECT S.code_sport, S.intitule,
+       COUNT (S.code_sport) AS "medailles collectives"
+FROM sport S, appartenir_equipe AE, gagner_collectif GC,
+     sportif SP
+WHERE GC.num_equipe = AE.num_equipe
+AND   SP.num_licence = AE.num_licence
+AND   SP.code_sport = S.code_sport
+GROUP BY S.code_sport;
+
+\echo aa. Nombre total de médailles.
+SELECT COUNT (*) AS "nb medailles"
+FROM   ((SELECT * FROM gagner_individuel GI)
+       UNION
+       (SELECT * FROM gagner_collectif GC)) all_medailles;
+
