@@ -168,7 +168,8 @@ GROUP BY S.code_sport;
 
 \echo aa. Nombre total de médailles.
 SELECT COUNT (*) AS "nb medailles"
-FROM   ((SELECT * FROM gagner_individuel GI)
+FROM   ((SELECT code_discipline, num_licence AS gagnant, medaille FROM gagner_individuel GI)
        UNION
-       (SELECT * FROM gagner_collectif GC)) all_medailles;
+       (SELECT code_discipline, num_equipe AS gagnant, medaille FROM gagner_collectif GC))
+       all_medailles;
 
