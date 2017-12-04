@@ -18,7 +18,8 @@ public class HashTS<Key, Value> implements DicoS<Key, Value> {
 	}
 
 	@Override
-	public void add(Key c, Value v) throws ExceptionFullHashTable {
+	public void add(Key c, Value v) throws ExceptionFullHashTable, ExceptionCléDéjàExistante {
+		if (this.exists(c)) throw new ExceptionCléDéjàExistante();
 		int where = this.nextEmptyCell(c);
 		if (where == -1) {
 			throw new ExceptionFullHashTable();

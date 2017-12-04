@@ -64,6 +64,7 @@ public class HashTC<Key, Value> implements Dico<Key, Value>{
 			while (iter.hasNext()) {
 				Pair<Key, Value> n = iter.next();
 				if (n.key == c) {
+					found = true;
 					break;
 				}
 				i++;

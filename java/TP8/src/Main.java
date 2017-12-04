@@ -17,7 +17,7 @@ public class Main {
 		System.out.println(dico.toString());
 	}
 	
-	public static void main(String[] args) throws ExceptionFullHashTable {
+	public static void main(String[] args) throws ExceptionFullHashTable, ExceptionCléDéjàExistante {
 		HashTS<String, String> dico = new HashTS<String, String>();
 		dico.add("BIOS", "Basic Input-Output System");
 		dico.add("BYTE", "A byte is a storage unit for data");

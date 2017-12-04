@@ -3,11 +3,11 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HashTSTest {
-	public HashTS<String, String> dico;
+public class DicoTest {
+	public HashTC<String, String> dico;
 	@Before
 	public void init() throws ExceptionFullHashTable, ExceptionCléDéjàExistante {
-		dico = new HashTS<String, String>();
+		dico = new HashTC<String, String>();
 		dico.add("BIOS", "Basic Input-Output System");
 		dico.add("BYTE", "A byte is a storage unit for data");
 		dico.add("CPU", "Central Processing Unit");
@@ -25,34 +25,12 @@ public class HashTSTest {
 	}
 	
 	@Test
-	public void testNextEmptyCell() throws ExceptionFullHashTable, ExceptionCléDéjàExistante {
-		assertEquals(dico.nextEmptyCell("foo"), 6);
+	public void testAdd() throws ExceptionCléDéjàExistante {
 		dico.add("GPU", "Graphics Processing Unit");
-		assertEquals(dico.nextEmptyCell("foo"), -1);
-	}
-
-	
-	@Test
-	public void testIndexByKey() throws ExceptionFullHashTable, ExceptionCléDéjàExistante {
-		assertEquals(dico.indexByKey("foo"), -1);
-		assertEquals(dico.indexByKey("RAM"), 0);
-		dico.add("GPU", "Graphics Processing Unit");
-		assertEquals(dico.indexByKey("GPU"), 6);
-	}
-	
-	@Test
-	public void testAdd() throws ExceptionFullHashTable, ExceptionCléDéjàExistante {
-		dico.add("GPU", "Graphics Processing Unit");
-	}
-
-	@Test (expected = ExceptionFullHashTable.class)
-	public void testAddFail() throws ExceptionFullHashTable, ExceptionCléDéjàExistante {
-		dico.add("GPU", "Graphics Processing Unit");
-		dico.add("GIF", "Graphics Interchange Format");
 	}
 	
 	@Test (expected = ExceptionCléDéjàExistante.class)
-	public void testAddFail2() throws ExceptionFullHashTable, ExceptionCléDéjàExistante {
+	public void testAddFail() throws ExceptionCléDéjàExistante {
 		dico.add("WYSIWYG", "What you see is what you google");
 	}
 

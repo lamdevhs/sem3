@@ -1,6 +1,6 @@
 public interface DicoS<Clé,Valeur> {
 
-	public void add(Clé c, Valeur v) throws ExceptionFullHashTable;
+	public void add(Clé c, Valeur v) throws ExceptionCléDéjàExistante, ExceptionFullHashTable;
 	
 	public void del(Clé c);
 	
