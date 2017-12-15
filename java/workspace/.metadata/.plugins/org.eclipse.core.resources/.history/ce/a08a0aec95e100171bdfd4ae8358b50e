@@ -1,0 +1,28 @@
+import java.util.ArrayList;
+
+public class ListInt extends ArrayList<Integer> {
+	public int sup = 100*1000;
+    ListInt() {
+    	for (int i = 0; i < this.sup; i++) {
+    		if (this.randBool()) {
+    			this.add(i);
+    		}
+    	}
+    }
+    
+    boolean randBool() {
+    	return this.randInt(2) == 0;
+    }
+    
+    int randInt(int sup) {
+    	return (int) Math.abs(Math.random() * sup);
+    }
+    
+    public static void main(String[] args) {
+		ListInt ints = new ListInt();
+		System.out.println(ints.size());
+		
+		int n = ;
+		
+	}
+}

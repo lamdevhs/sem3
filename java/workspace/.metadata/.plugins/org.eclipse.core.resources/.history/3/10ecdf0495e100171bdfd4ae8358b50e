@@ -1,0 +1,11 @@
+import java.util.ArrayList;
+
+public class ListInt extends ArrayList<Integer> {
+    ListInt() {
+    	
+    }
+    
+    int randInt(Int sup) {
+    	return Math.abs(Math.random()*sup);
+    }
+}
