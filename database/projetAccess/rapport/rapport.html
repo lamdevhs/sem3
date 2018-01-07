@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Asciidoctor 1.5.4">
+  <meta name="author" content="Julie Gleizes, Nathanael Bayard">
+  <title>Projet Access : Application de Gestion de Stages</title>
+  <link rel="stylesheet" href="https://asciidoclive.com/assets/asciidoctor.js/css/asciidoctor.css">
+</head>
+
+<body class="article">
+  <div id="header">
+    <h1>Projet Access : <br>Application de Gestion de Stages</h1>
+    <div class="details">
+      <span id="author" class="author">Julie Gleizes, Nathanael Bayard</span><br>
+      <span id="revdate">L2 Info -- 2017/2018 -- Bases de Données 1</span>
+    </div>
+  </div>
+  <div id="content">
+    <div class="sect1">
+      <h2 id="_menu_principal">Menu Principal</h2>
+      <div class="sectionbody">
+        <div class="paragraph">
+          <p>Le menu de l&#8217;application offre quatre boutons, deux permettant de
+            lister les entreprises et les stagiaires, et deux permettant d&#8217;ajouter
+            un nouveau stagiaire ou une nouvelle entreprise. Ces deux derniers boutons
+            sont également accessibles depuis les formulaires qui listent les entreprises
+            et les stagiaires.</p>
+        </div>
+        <div class="imageblock">
+          <div class="content">
+            <img src="menu.png" alt="Menu de l'application">
+          </div>
+          <div class="title">Figure 1. Menu de l&#8217;application</div>
+        </div>
+      </div>
+    </div>
+    <div class="sect1">
+      <h2 id="_liste_des_stagiaires">Liste des Stagiaires</h2>
+      <div class="sectionbody">
+        <div class="paragraph">
+          <p>Ce formulaire s&#8217;inspire du formulaire qui liste les entreprises.
+            Il contient un accès rapide et direct à la fiche d&#8217;un stagiaire
+            par le biais d&#8217;une liste déroulante présentant la liste des noms
+            des stagiaires.</p>
+        </div>
+        <div class="imageblock">
+          <div class="content">
+            <img src="stagiaires.png" alt="Formulaire de Liste des stagiaires">
+          </div>
+          <div class="title">Figure 2. Formulaire de Liste des stagiaires</div>
+        </div>
+        <div class="imageblock">
+          <div class="content">
+            <img src="byName_s.png" alt="Accès direct par nom de stagiaire">
+          </div>
+          <div class="title">Figure 3. Accès direct par nom de stagiaire</div>
+        </div>
+      </div>
+    </div>
+    <div class="sect1">
+      <h2 id="_acc_s_direct_par_nom_d_entreprises">Accès direct par nom d&#8217;entreprises</h2>
+      <div class="sectionbody">
+        <div class="paragraph">
+          <p>Le même mécanisme a été rajouté au formulaire qui liste les entreprises,
+            pour éviter que les utilisateurs n&#8217;aient à connaître par coeur
+            les numéros de référence correspondant aux diverses entreprises.</p>
+        </div>
+        <div class="imageblock">
+          <div class="content">
+            <img src="byName_e.png" alt="Accès direct par nom d'entreprise">
+          </div>
+          <div class="title">Figure 4. Accès direct par nom d&#8217;entreprise</div>
+        </div>
+        <div class="paragraph">
+          <p><br> Pour les deux menu déroulants d&#8217;accès rapide, s&#8217;il y a
+            plusieurs stagiaires ou entreprises ayant le même nom, seul le premier
+            sera accessible à travers cette fonctionalité.</p>
+        </div>
+      </div>
+    </div>
+    <div class="sect1">
+      <h2 id="_formulaires_d_ajout">Formulaires d&#8217;ajout</h2>
+      <div class="sectionbody">
+        <div class="paragraph">
+          <p>Ci-dessous, les formulaires permettant d&#8217;ajouter de nouvelles entreprises
+            ou stagiaires. Une macro assure que le curseur de clavier se positionne
+            de lui-même sur le premier champ à renseigner, donc, en ignorant le champ
+            de numéro de référence, puisqu&#8217;il est lui automatiquement généré.</p>
+        </div>
+        <div class="imageblock">
+          <div class="content">
+            <img src="addE_mainmenu.png" alt="Ajout d'une entreprise depuis le Menu Principal">
+          </div>
+          <div class="title">Figure 5. Ajout d&#8217;une entreprise depuis le Menu Principal</div>
+        </div>
+        <div class="paragraph">
+          <p><br></p>
+        </div>
+        <div class="imageblock">
+          <div class="content">
+            <img src="addS_mainmenu.png" alt="Ajout d'un stagiaire depuis le Menu Principal">
+          </div>
+          <div class="title">Figure 6. Ajout d&#8217;un stagiaire depuis le Menu Principal</div>
+        </div>
+        <div class="paragraph">
+          <p><br></p>
+        </div>
+        <div class="imageblock">
+          <div class="content">
+            <img src="addS_stagiaires.png" alt="Ajout d'un stagiaire depuis la Liste des Stagiaires">
+          </div>
+          <div class="title">Figure 7. Ajout d&#8217;un stagiaire depuis la Liste des Stagiaires</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
