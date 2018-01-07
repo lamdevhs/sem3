@@ -6,13 +6,18 @@
 # trick:
 # echo foo{,} --> foo foo
 
+function br() {
+  echo "----------------"
+}
+
 git config --global user.email lam.dev.hs@gmail.com
 git config --global user.name lamdevhs
 
-git add $1; git status
-echo "next step: commit -m $2 ; status" ; sleep 5
+br; br
+git status; git add $1; br; git status; br;
+echo -n "next step: commit -m $2 ; status " ; read
 
-git commit -m $2; git status
-echo "next step: push" ; sleep 5
+git commit -m $2; br; git status; br;
+echo -n "next step: push " ; read
 
-git push origin master
+br; git push origin master
