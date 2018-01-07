@@ -6,6 +6,11 @@
 # trick:
 # echo foo{,} --> foo foo
 
+
+# ~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~
+
+
 function br() {
   echo "----------------"
 }
@@ -25,3 +30,6 @@ br; git push origin master
 
 br; echo "end"
 br; br
+
+# ~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~
