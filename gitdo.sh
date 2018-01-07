@@ -20,4 +20,4 @@ echo -n "next step: commit -m $2 ; status " ; read
 br; git commit -m $2; br; git status; br;
 echo -n "next step: push " ; read
 
-br; git push origin master; br; echo "end"
+br; git push origin master; br; echo "end"; br; br
